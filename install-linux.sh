@@ -85,7 +85,7 @@ detect_distro() {
             PKG_INSTALL="sudo pacman -S --noconfirm"
             ;;
         *)
-            PKG_MANAGER="unknown"
+            PKG_MANAGER="unknown"  # shellcheck disable=SC2034
             PKG_INSTALL=""
             echo -e "${YELLOW}⚠️  Unknown distro. You may need to install dependencies manually.${NC}"
             ;;

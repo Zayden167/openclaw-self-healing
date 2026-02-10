@@ -5,6 +5,26 @@ All notable changes to OpenClaw Self-Healing System will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-02-10
+
+### Added
+- **Linux systemd support:** Full cross-platform support (Ubuntu, Debian, RHEL, Arch, Raspberry Pi)
+- **`install-linux.sh`:** One-click Linux installer with distro detection (apt/dnf/pacman)
+- **systemd unit files:** `openclaw-gateway.service`, `openclaw-healthcheck.service/.timer`, `openclaw-emergency-recovery.service`
+- **User-level systemd:** No `sudo` required — all services run under `~/.config/systemd/user/`
+- **Good First Issues:** #1 Docker, #2 Grafana/Prometheus, #3 Multi-channel notifications, #4 BATS tests
+- **Star History chart** in README
+- **GitHub stars badge** in README
+
+### Changed
+- **`install.sh`:** Auto-detects OS → routes Linux to `install-linux.sh`
+- **`emergency-recovery.sh`:** Linux-aware install hints (apt/dnf/pacman instead of brew)
+- **`docs/LINUX_SETUP.md`:** Rewritten from template to full guide (one-click, manual, troubleshooting, uninstall)
+- **README.md:** Supported Platforms table, Linux install section, updated Roadmap with issue links
+
+### Fixed
+- **`gateway.service`:** Added fallback note for manual installations (OpenClaw may already manage its own systemd service)
+
 ## [2.0.1] - 2026-02-07
 
 ### Fixed
