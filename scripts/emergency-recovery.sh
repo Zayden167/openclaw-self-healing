@@ -14,7 +14,7 @@ cleanup() {
         tmux kill-session -t "$TMUX_SESSION" 2>/dev/null || true
     fi
     # Remove lock file if exists (uses $LOCKFILE set later, fallback to default)
-    rm -f "${LOCKFILE:-$HOME/openclaw/memory/.emergency-recovery.lock}" 2>/dev/null || true
+    rm -rf "${LOCKDIR:-$HOME/openclaw/memory/.emergency-recovery.lock}" 2>/dev/null || true
     exit "$exit_code"
 }
 trap cleanup EXIT INT TERM
@@ -43,8 +43,12 @@ chmod 700 "$LOG_DIR" 2>/dev/null || true
 touch "$SESSION_LOG"
 chmod 600 "$SESSION_LOG"
 
-# Secure lock file location (not world-readable /tmp)
-LOCKFILE="$LOG_DIR/.emergency-recovery.lock"
+# Secure lock location (atomic mkdir)
+LOCKDIR="$LOG_DIR/.emergency-recovery.lock"
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Another emergency recovery is already running, skipping..."
+  exit 0
+fi
 
 # Performance metrics
 METRICS_FILE="$LOG_DIR/.emergency-recovery-metrics.json"

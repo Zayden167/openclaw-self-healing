@@ -19,13 +19,12 @@ HTTP_TIMEOUT="${HEALTH_CHECK_HTTP_TIMEOUT:-10}"
 METRICS_FILE="$LOG_DIR/.healthcheck-metrics.json"
 
 # Lock file로 중복 실행 방지
-LOCKFILE=/tmp/openclaw-healthcheck.lock
-if [ -f "$LOCKFILE" ]; then
+LOCKDIR=/tmp/openclaw-healthcheck.lock
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] Previous health check still running, skipping..."
   exit 0
 fi
-touch "$LOCKFILE"
-trap 'rm -f "$LOCKFILE"' EXIT
+trap 'rm -rf "$LOCKDIR"' EXIT
 
 # Create log directory if not exists
 mkdir -p "$LOG_DIR"
