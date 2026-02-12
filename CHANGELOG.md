@@ -5,42 +5,59 @@ All notable changes to OpenClaw Self-Healing System will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.1] - 2026-02-11
+---
+
+## [2.1.0] - 2026-02-09
 
 ### Added
-- **Quick Start section** in README — 60-second installation guide with navigation links
-- **Traffic chart automation** — GitHub Actions workflow that auto-updates `assets/traffic-chart.png` daily
-- **New badges** — Last commit, code size badges in README
-- **Stats & Growth section** — Detailed repository metrics table (stars, clones, views, forks)
-- **Navigation buttons** — Quick jump links to key sections (Quick Start, Architecture, Install, Troubleshooting, Stats)
+- **Emergency PTY Recovery Auto-Trigger** — Level 3 now automatically triggers when Watchdog detects critical failures (crash >= 5 OR doctor --fix fails 2x)
+- **config-watch Auto-Repair** — Proactive config validation with automatic `doctor --fix` on schema violations (~2min recovery)
+- **Enhanced 4-Tier Self-Healing** — config-watch (L1) → Watchdog (L2) → Emergency PTY (L3) → Guardian + Discord (L4)
 
 ### Changed
-- **ShellCheck workflow** — Added `-S warning -e SC2317 -x` options for stricter linting
-- **Project stats** — Updated Lines of Code from ~300 to ~900 (accurate count)
-- **Recovery success rate** — Changed from 94% to 90%+ (conservative, production-tested)
+- **Watchdog v5.4** — Now triggers Emergency Recovery instead of giving up on critical failures
+- **config-watch** — Enhanced with JSON validation + auto-repair (previously backup-only)
+- **Architecture** — Maintained 4-tier structure, added config-watch as new L1, Emergency PTY as L3
 
 ### Fixed
-- **.gitignore** — Added comprehensive exclusions for personal workspace files (`memory/`, `SESSION-STATE.md`, `skills/`, git backups)
+- **Critical Bug**: Emergency Recovery script existed but was never automatically triggered (fixed by adding Watchdog integration)
+- **Recovery Gap**: No automatic escalation path from Watchdog to Claude autonomous recovery
 
-## [2.1.0] - 2026-02-10
+### Performance
+- **Config errors**: Now recover in ~2min (down from manual intervention)
+- **Complex failures**: Auto-trigger Claude recovery (previously required manual script execution)
+
+### Documentation
+- Updated README.md with new 3-tier architecture diagram
+- Added recovery path examples
+- Updated "What Makes This Special" section with v2.1 features
+
+### Technical Details
+- `gateway-watchdog.sh`: Added Emergency Recovery trigger at 3 critical failure points
+- `config-watch.sh`: Added `doctor --check` + `doctor --fix` auto-execution
+- Both scripts now send Discord alerts on auto-repair success/failure
+
+---
+
+## [2.0.2] - 2026-02-09
 
 ### Added
-- **Linux systemd support:** Full cross-platform support (Ubuntu, Debian, RHEL, Arch, Raspberry Pi)
-- **`install-linux.sh`:** One-click Linux installer with distro detection (apt/dnf/pacman)
-- **systemd unit files:** `openclaw-gateway.service`, `openclaw-healthcheck.service/.timer`, `openclaw-emergency-recovery.service`
-- **User-level systemd:** No `sudo` required — all services run under `~/.config/systemd/user/`
-- **Good First Issues:** #1 Docker, #2 Grafana/Prometheus, #3 Multi-channel notifications, #4 BATS tests
-- **Star History chart** in README
-- **GitHub stars badge** in README
+- **Watchdog v5.3 - Auto Config Fix**: Automatic `openclaw doctor --fix` execution when crash_count >= 2
+  - Detects configuration validation errors automatically
+  - Reduces recovery time from 36 minutes to 7 minutes (5x faster)
+  - No separate cron required (integrated into Watchdog LaunchAgent)
+  - Maintains full backward compatibility with existing functionality
 
-### Changed
-- **`install.sh`:** Auto-detects OS → routes Linux to `install-linux.sh`
-- **`emergency-recovery.sh`:** Linux-aware install hints (apt/dnf/pacman instead of brew)
-- **`docs/LINUX_SETUP.md`:** Rewritten from template to full guide (one-click, manual, troubleshooting, uninstall)
-- **README.md:** Supported Platforms table, Linux install section, updated Roadmap with issue links
+### Improved
+- **Gateway Recovery**: Enhanced self-healing system with configuration auto-fix
+- **Alerting**: Discord notifications now include auto-fix attempt information
+- **Documentation**: Added detailed version history for Watchdog v5.3
 
-### Fixed
-- **`gateway.service`:** Added fallback note for manual installations (OpenClaw may already manage its own systemd service)
+### Technical Details
+- **Trigger condition**: crash_count >= 2 (5+ minutes of continuous failure)
+- **Action**: Execute `openclaw doctor --fix` to repair configuration errors
+- **Fallback**: If auto-fix fails, continues with standard restart retry logic
+- **Risk**: Minimal (code changes isolated, easy rollback via git revert)
 
 ## [2.0.1] - 2026-02-07
 
