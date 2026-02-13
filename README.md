@@ -1,18 +1,15 @@
 <div align="center">
 
-<!-- Hero Image Placeholder -->
-<img src="assets/logo.png" alt="OpenClaw Self-Healing" width="200" onerror="this.style.display='none'"/>
-
 # 🦞 OpenClaw Self-Healing System
 
 ### *Autonomous AI-Powered Recovery for Production Services*
 
 **Stop getting paged at 3 AM. Let AI fix your crashes automatically.**
 
-[🚀 Quick Start](#-quick-start) • [📖 Docs](docs/) • [🎬 Demo](#-how-it-works) • [💬 Community](#-community) • [⭐ Star Us](#)
+[🚀 Quick Start](#-quick-start) • [📖 Docs](docs/) • [🎬 Demo](#-how-it-works) • [💬 Community](#-community) • [⭐ Star Us](https://github.com/Ramsbaby/openclaw-self-healing/stargazers)
 
 [![GitHub Stars](https://img.shields.io/github/stars/ramsbaby/openclaw-self-healing?style=social)](https://github.com/ramsbaby/openclaw-self-healing/stargazers)
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/Ramsbaby/openclaw-self-healing/releases)
+[![Version](https://img.shields.io/badge/version-2.1.1-blue.svg)](https://github.com/Ramsbaby/openclaw-self-healing/releases/tag/v2.1.1)
 [![Evaluation](https://img.shields.io/badge/evaluation-9.9%2F10.0-brightgreen.svg)](docs/self-healing-system.md)
 [![Recovery Rate](https://img.shields.io/badge/recovery%20rate-99%25-green.svg)](docs/self-healing-system.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
