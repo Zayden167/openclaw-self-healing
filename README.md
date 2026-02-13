@@ -15,6 +15,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: macOS](https://img.shields.io/badge/Platform-macOS-blue.svg)](https://www.apple.com/macos/)
 
+<br/>
+
+![Self-Healing Demo](https://raw.githubusercontent.com/Ramsbaby/openclaw-self-healing/main/assets/demo.gif)
+
+*4-tier recovery in action: Watchdog → Health Check → AI Doctor → Alert*
+
 </div>
 
 ---
@@ -58,10 +64,6 @@ When all else fails, **Claude Code acts as an autonomous emergency doctor**:
 ---
 
 ## 🎬 How It Works
-
-![Self-Healing Demo](https://raw.githubusercontent.com/Ramsbaby/openclaw-self-healing/main/assets/demo.gif)
-
-*4-tier recovery in action: Watchdog → Health Check → AI Doctor → Alert*
 
 ### 4-Tier Autonomous Recovery
 
