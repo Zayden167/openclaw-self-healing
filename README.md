@@ -389,7 +389,7 @@ Thanks to these amazing people:
   <tbody>
     <tr>
       <td align="center"><a href="https://github.com/ramsbaby"><img src="https://github.com/ramsbaby.png?size=100" width="100px;" alt="Ramsbaby"/><br /><sub><b>Ramsbaby</b></sub></a><br />💻 📖 🤔 🎨</td>
-      <!-- More contributors will be added here -->
+      <td align="center"><a href="https://github.com/AbhiWisdom"><img src="https://github.com/AbhiWisdom.png?size=100" width="100px;" alt="AbhiWisdom"/><br /><sub><b>AbhiWisdom</b></sub></a><br />💻 <a href="https://github.com/Ramsbaby/openclaw-self-healing/pull/5">#5</a> Telegram notifications</td>
     </tr>
   </tbody>
 </table>
@@ -427,9 +427,9 @@ Thanks to these amazing people:
 
 ## 📊 Repository Traffic
 
-**Stats (2026-02-13):**
-- ⭐ **14 stars** · 🍴 **1 fork** · 👀 **1 watcher** · 📋 **2 open issues**
-- 👁️ **382 views** (219 unique) · 📥 **688 clones** (235 unique)
+**Stats (2026-02-17):**
+- ⭐ **16 stars** · 🍴 **2 forks** · 👀 **1 watcher**
+- 👁️ **477 views** (263 unique) · 📥 **870 clones** (319 unique)
 
 | Date | Views | Unique | Clones | Unique |
 |------|-------|--------|--------|--------|
@@ -439,15 +439,20 @@ Thanks to these amazing people:
 | 2/9 (Marketing) | 51 | 45 | 108 | 52 |
 | 2/10 | 92 | 47 | 303 | 77 |
 | 2/11 | 34 | 26 | 57 | 32 |
-| **Total** | **382** | **219** | **688** | **235** |
+| 2/12 | 31 | 20 | 45 | 25 |
+| 2/13 | 7 | 7 | 51 | 31 |
+| 2/14 | 19 | 9 | 41 | 27 |
+| 2/15 | 18 | 12 | 25 | 20 |
+| 2/16 | 20 | 13 | 20 | 20 |
+| **Total** | **477** | **263** | **870** | **319** |
 
 ## ⭐ Star History
 
 <a href="https://star-history.com/#ramsbaby/openclaw-self-healing&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&theme=dark&v=20260213" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&v=20260213" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&v=20260213" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&theme=dark&v=20260217" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&v=20260217" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ramsbaby/openclaw-self-healing&type=Date&v=20260217" />
   </picture>
 </a>
 
