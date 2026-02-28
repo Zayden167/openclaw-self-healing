@@ -59,13 +59,23 @@ log() {
 send_discord_notification() {
   local message="$1"
   if [ -n "$DISCORD_WEBHOOK" ]; then
+    # Build JSON payload safely to prevent injection
+    local json_payload
+    if command -v jq &>/dev/null; then
+      json_payload="{\"content\": $(printf '%s' "$message" | jq -R -s '.')}"
+    elif command -v python3 &>/dev/null; then
+      json_payload="{\"content\": $(printf '%s' "$message" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')}"
+    else
+      local escaped="${message//\\/\\\\}"; escaped="${escaped//\"/\\\"}"
+      json_payload="{\"content\": \"$escaped\"}"
+    fi
     local response_code
     response_code=$(curl -s -o /dev/null -w "%{http_code}" \
       -X POST "$DISCORD_WEBHOOK" \
       -H "Content-Type: application/json" \
-      -d "{\"content\": \"$message\"}" \
+      -d "$json_payload" \
       2>&1)
-    
+
     if [ "$response_code" = "200" ] || [ "$response_code" = "204" ]; then
       log "✅ Discord notification sent (HTTP $response_code)"
     else

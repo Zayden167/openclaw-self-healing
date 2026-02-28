@@ -193,12 +193,12 @@ download_scripts() {
         "emergency-recovery-monitor.sh"
     )
 
-    # Download from skills directory structure
-    local base_url="$REPO_RAW/skills/openclaw-self-healing/scripts"
+    # Download from scripts directory
+    local base_url="$REPO_RAW/scripts"
 
     for script in "${scripts[@]}"; do
         echo "   Downloading $script..."
-        curl -sSL "$base_url/$script" -o "$OPENCLAW_CONFIG_DIR/skills/openclaw-self-healing/scripts/$script"
+        curl -sSL --proto '=https' --tlsv1.2 "$base_url/$script" -o "$OPENCLAW_CONFIG_DIR/skills/openclaw-self-healing/scripts/$script"
         chmod 700 "$OPENCLAW_CONFIG_DIR/skills/openclaw-self-healing/scripts/$script"
     done
 

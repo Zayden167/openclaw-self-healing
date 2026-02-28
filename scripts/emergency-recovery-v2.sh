@@ -82,13 +82,23 @@ log() {
 send_discord_notification() {
   local message="$1"
   if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+    # Build JSON payload safely to prevent injection
+    local json_payload
+    if command -v jq &>/dev/null; then
+      json_payload="{\"content\": $(printf '%s' "$message" | jq -R -s '.')}"
+    elif command -v python3 &>/dev/null; then
+      json_payload="{\"content\": $(printf '%s' "$message" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')}"
+    else
+      local escaped="${message//\\/\\\\}"; escaped="${escaped//\"/\\\"}"
+      json_payload="{\"content\": \"$escaped\"}"
+    fi
     local response_code
     response_code=$(curl -s -o /dev/null -w "%{http_code}" \
       -X POST "$DISCORD_WEBHOOK_URL" \
       -H "Content-Type: application/json" \
-      -d "{\"content\": \"$message\"}" \
+      -d "$json_payload" \
       2>&1 || echo "000")
-    
+
     if [ "$response_code" = "200" ] || [ "$response_code" = "204" ]; then
       log "✅ Discord notification sent (HTTP $response_code)"
     else
@@ -100,13 +110,30 @@ send_discord_notification() {
 send_telegram_notification() {
   local message="$1"
   if [ -n "$TELEGRAM_BOT_TOKEN" ] && [ -n "$TELEGRAM_CHAT_ID" ]; then
+    # Build JSON payload safely to prevent injection
+    local json_payload
+    if command -v jq &>/dev/null; then
+      local json_chat_id json_text
+      json_chat_id=$(printf '%s' "$TELEGRAM_CHAT_ID" | jq -R -s '.')
+      json_text=$(printf '%s' "$message" | jq -R -s '.')
+      json_payload="{\"chat_id\": $json_chat_id, \"text\": $json_text, \"parse_mode\": \"Markdown\"}"
+    elif command -v python3 &>/dev/null; then
+      local json_chat_id json_text
+      json_chat_id=$(printf '%s' "$TELEGRAM_CHAT_ID" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+      json_text=$(printf '%s' "$message" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+      json_payload="{\"chat_id\": $json_chat_id, \"text\": $json_text, \"parse_mode\": \"Markdown\"}"
+    else
+      local escaped_msg="${message//\\/\\\\}"; escaped_msg="${escaped_msg//\"/\\\"}"
+      local escaped_id="${TELEGRAM_CHAT_ID//\"/\\\"}"
+      json_payload="{\"chat_id\": \"$escaped_id\", \"text\": \"$escaped_msg\", \"parse_mode\": \"Markdown\"}"
+    fi
     local response_code
     response_code=$(curl -s -o /dev/null -w "%{http_code}" \
       -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
       -H "Content-Type: application/json" \
-      -d "{\"chat_id\": \"$TELEGRAM_CHAT_ID\", \"text\": \"$message\", \"parse_mode\": \"Markdown\"}" \
+      -d "$json_payload" \
       2>&1 || echo "000")
-    
+
     if [ "$response_code" = "200" ]; then
       log "✅ Telegram notification sent (HTTP $response_code)"
     else
