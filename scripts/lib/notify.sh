@@ -11,6 +11,25 @@ TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-}"
 NOTIFICATION_CHANNEL="${NOTIFICATION_CHANNEL:-discord}"  # discord|telegram|all
 
 # ============================================
+# JSON helper: safely encode a string value for JSON
+# ============================================
+json_encode_string() {
+  local input="$1"
+  # Use jq for safe JSON encoding if available; fall back to Python3, then sed
+  if command -v jq &>/dev/null; then
+    printf '%s' "$input" | jq -R -s '.'
+  elif command -v python3 &>/dev/null; then
+    printf '%s' "$input" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
+  else
+    # Basic sed escaping: backslashes first, then double-quotes, then control chars
+    local escaped
+    escaped="${input//\\/\\\\}"
+    escaped="${escaped//\"/\\\"}"
+    printf '"%s"' "$escaped"
+  fi
+}
+
+# ============================================
 # Discord Notification
 # ============================================
 send_discord_notification() {
@@ -21,11 +40,14 @@ send_discord_notification() {
     return 1
   fi
   
+  local json_payload
+  json_payload="{\"content\": $(json_encode_string "$message")}"
+  
   local response_code
   response_code=$(curl -s -o /dev/null -w "%{http_code}" \
     -X POST "$DISCORD_WEBHOOK" \
     -H "Content-Type: application/json" \
-    -d "{\"content\": \"$message\"}" \
+    -d "$json_payload" \
     2>&1 || echo "000")
   
   if [ "$response_code" = "200" ] || [ "$response_code" = "204" ]; then
@@ -54,20 +76,19 @@ send_telegram_notification() {
   # - \\n → actual newlines
   local telegram_message
   telegram_message=$(echo -e "$message" | sed 's/\*\*/*/g')
-  
+
   # Telegram Bot API endpoint
   local api_url="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
-  
+
+  # Build JSON payload safely to prevent injection
+  local json_payload
+  json_payload="{\"chat_id\": $(json_encode_string "$TELEGRAM_CHAT_ID"), \"text\": $(json_encode_string "$telegram_message"), \"parse_mode\": \"Markdown\", \"disable_notification\": false}"
+
   # Send message with Markdown formatting
   local response
   response=$(curl -s -X POST "$api_url" \
     -H "Content-Type: application/json" \
-    -d "{
-      \"chat_id\": \"$TELEGRAM_CHAT_ID\",
-      \"text\": \"$telegram_message\",
-      \"parse_mode\": \"Markdown\",
-      \"disable_notification\": false
-    }" 2>&1)
+    -d "$json_payload" 2>&1)
   
   # Check if response contains "ok":true
   if echo "$response" | grep -q '"ok":true'; then
